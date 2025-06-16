@@ -9,7 +9,7 @@ We will update more detailed result (including dataset, training, verification) 
 - [x] **2025.3.2**: Add code
 - [x] :Add G2APS-ReID reconstructed code
 - [x] :Add detailed process description
-- [ ] :Add the LAGPeR and the usage license(LAGPR is undergoing systematic collation and revision)
+- [x] :Add the LAGPeR and the usage license(LAGPR is undergoing systematic collation and revision)
 
 ### News
 20250405 - Our paper was selected as a CVPR 2025 Highlight！
@@ -27,7 +27,7 @@ We propose two large-scale aerial-ground cross-view person re-identification dat
 
 ### LAGPeR
 
-We constructed the LAGPeR dataset, a large-scale AGPReID benchmark, by collecting multi-scenario surveillance data across seven distinct real-world environments. (We sincerely apologize that, due to copyright and privacy protection regulations, the LAGPeR dataset is currently undergoing systematic collation and revision. The usage license will be opened subsequently upon completion of compliance reviews.)
+We constructed the LAGPeR dataset, a large-scale AGPReID benchmark, by collecting multi-scenario surveillance data across seven distinct real-world environments. You can fill in the [Data Release Protocol](https://wangshining681.github.io/laper-page/) here and send it to this [email address](wangshining@mail.nwpu.edu.cn) to obtain the data usage rights of LAGPeR.
 
 <img src=".\assets\scene.png"  />
 

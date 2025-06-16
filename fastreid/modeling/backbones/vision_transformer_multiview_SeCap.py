@@ -33,7 +33,8 @@ from operator import mul
 import copy
 
 logger = logging.getLogger(__name__)
-
+def softmax_one(x, dim=-1):
+    return (x.exp() + 1e-6) / (x.exp().sum(dim, keepdim=True) + 1)
 
 class Mlp(nn.Module):
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.):
@@ -89,6 +90,7 @@ class CrossAttention(nn.Module):
         embedding_dim: int,         # 输入channel
         num_heads: int,             # attention的head数
         downsample_rate: int = 1,   # 下采样
+        smax_mode=None
     ) -> None:
         super().__init__()
         self.embedding_dim = embedding_dim
@@ -100,7 +102,7 @@ class CrossAttention(nn.Module):
         self.k_proj = nn.Linear(embedding_dim, self.internal_dim)
         self.v_proj = nn.Linear(embedding_dim, self.internal_dim)
         self.out_proj = nn.Linear(self.internal_dim, embedding_dim)
-
+        self.smax = smax_mode
     def _separate_heads(self, x, num_heads: int) :
         b, n, c = x.shape
         x = x.reshape(b, n, num_heads, c // num_heads)
@@ -128,7 +130,10 @@ class CrossAttention(nn.Module):
         attn = q @ k.permute(0, 1, 3, 2)  # B,N_heads,N_tokens,C_per_head
         # Scale
         attn = attn / math.sqrt(c_per_head)
-        attn = torch.softmax(attn, dim=-1)
+        if self.smax is not None:
+            attn = softmax_one(attn, dim=-1)
+        else:
+            attn = torch.softmax(attn, dim=-1)
         # Get output
         out = attn @ v
         # # B,N_tokens,C
