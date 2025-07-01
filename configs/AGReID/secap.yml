@@ -16,7 +16,7 @@ MODEL:
     DROP_RATIO: 0.0
     ATT_DROP_RATE: 0.0
     INNER_SUB: True
-    PROMPT_LEN: 64
+    PROMPT_LEN: 128
     PROMPT_DEPTH: 2
     USE_PRM: True
 
@@ -37,7 +37,7 @@ MODEL:
       # view-related learning
       VIEW_ID: True
       VIEW_OREG: True
-      VIEW_LAMBDA: 0.001
+      VIEW_LAMBDA: 10.0
 
     TRI:
       MARGIN: 0.0
