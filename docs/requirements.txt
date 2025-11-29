@@ -18,3 +18,5 @@ scikit-learn
 tabulate
 gdown
 faiss-cpu
+mat4py
+pandas
