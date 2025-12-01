@@ -18,3 +18,5 @@ scikit-learn
 tabulate
 gdown
 faiss-gpu
+mat4py
+pandas
