@@ -547,7 +547,7 @@ class EarlyStopping(HookBase):
         self.stopped_epoch = 0
         self.logger = logging.getLogger(__name__)
 
-        self._period = 
+        self._period = eval_period
 
     def before_train(self):
         if len(self.trainer.cfg.DATASETS.TESTS) == 1:
