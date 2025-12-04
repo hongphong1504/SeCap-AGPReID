@@ -98,6 +98,6 @@ CUDNN_BENCHMARK: True
 DATASETS:
   NAMES: ("AG_ReID_v2",)
   # TESTS: ("AG_ReID_v2", "AG_ReID_v2_G2A","AG_ReID_v2_A2W","AG_ReID_v2_W2A")
-  TESTS: ("AG_ReID_v2")
+  TESTS: ("AG_ReID_v2",)
 
 OUTPUT_DIR: logs/AG_ReID_v2/SeCap
