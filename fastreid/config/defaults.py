@@ -296,6 +296,10 @@ _C.SOLVER.FREEZE_ITERS = 0
 
 _C.SOLVER.CHECKPOINT_PERIOD = 20
 
+# Early stopping options
+_C.SOLVER.EARLY_STOPPING_PATIENCE = 4
+_C.SOLVER.EARLY_STOPPING_MIN_DELTA = 0.005
+
 # Number of images per batch across all machines.
 # This is global, so if we have 8 GPUs and IMS_PER_BATCH = 256, each GPU will
 # see 32 images per batch
