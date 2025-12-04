@@ -320,6 +320,7 @@ class DefaultTrainer(TrainerBase):
             ret.append(hooks.PeriodicCheckpointer(self.checkpointer, cfg.SOLVER.CHECKPOINT_PERIOD))
             # run writers in the end, so that evaluation metrics are written
             ret.append(hooks.PeriodicWriter(self.build_writers(), 200))
+            ret.append(hooks.EarlyStopping(cfg.SOLVER.EARLY_STOPPING_PATIENCE, cfg.SOLVER.EARLY_STOPPING_MIN_DELTA, cfg.TEST.EVAL_PERIOD))
 
         return ret
 

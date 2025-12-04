@@ -146,6 +146,8 @@ class TrainerBase:
                         self.after_step()
                         self.iter += 1
                     self.after_epoch()
+            except StopIteration:  # Used by EarlyStoppingHook
+                logger.info("Training stopped by early stopping.")
             except Exception:
                 logger.exception("Exception during training:")
                 raise

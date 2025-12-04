@@ -33,6 +33,8 @@ __all__ = [
     "EvalHook",
     "PreciseBN",
     "LayerFreeze",
+    "SWA",
+    "EarlyStopping"
 ]
 
 """
@@ -532,3 +534,57 @@ class SWA(HookBase):
         is_final = next_iter == self.trainer.max_iter
         if is_final:
             self.trainer.optimizer.swap_swa_param()
+
+
+class EarlyStopping(HookBase):
+    def __init__(self, patience: int, min_delta: float, eval_period: int):
+        self.patience = patience    
+        self.min_delta = min_delta
+        self._period = eval_period
+        
+        self.best_metric = None
+        self.wait = 0
+        self.stopped_epoch = 0
+        self.logger = logging.getLogger(__name__)
+
+        self._period = 
+
+    def before_train(self):
+        if len(self.trainer.cfg.DATASETS.TESTS) == 1:
+            self.metric_name = "metric"
+        else:
+            self.metric_name = self.trainer.cfg.DATASETS.TESTS[0] + "/metric"
+
+        self.best_metric = -1
+        self.wait = 0
+        self.stopped_epoch = 0
+        self.logger.info(f"EarlyStopping: patience={self.patience}, min_delta={self.min_delta}, monitoring '{self.metric_name}'")
+
+    def _assess(self):
+        storage = get_event_storage()
+
+        current_metric = storage.latest()[self.metric_name][0] if self.metric_name in storage.latest() else -1
+        current_metric = float(current_metric)
+
+        # Kiểm tra cải thiện
+        improved = False
+        improved = current_metric >= self.best_metric + self.min_delta
+        
+        if improved:
+            self.best_metric = current_metric
+            self.wait = 0
+            self.logger.info(f"Epoch {self.trainer.epoch}: New best: {current_metric:.4f}")
+        else:
+            self.wait += 1
+            self.logger.info(f"Epoch {self.trainer.epoch}: No improvement, current: {current_metric:.4f} "
+                             f"(best: {self.best_metric:.4f}), wait: {self.wait}/{self.patience}")
+
+        if self.wait >= self.patience:
+            self.stopped_epoch = self.trainer.epoch
+            self.logger.warning(f"Early stopping triggered at epoch {self.stopped_epoch}!")
+            raise StopIteration
+
+    def after_epoch(self):
+        next_epoch = self.trainer.epoch + 1
+        if self._period > 0 and next_epoch % self._period == 0:
+            self._assess()
