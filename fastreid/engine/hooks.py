@@ -555,7 +555,7 @@ class EarlyStopping(HookBase):
         else:
             self.metric_name = self.trainer.cfg.DATASETS.TESTS[0] + "/metric"
 
-        self.best_metric = -1
+        self.best_metric = 57
         self.wait = 0
         self.stopped_epoch = 0
         self.logger.info(f"[EarlyStop] EarlyStopping: patience={self.patience}, min_delta={self.min_delta}, monitoring '{self.metric_name}'")
