@@ -321,7 +321,7 @@ class DefaultTrainer(TrainerBase):
             # run writers in the end, so that evaluation metrics are written
             ret.append(hooks.PeriodicWriter(self.build_writers(), 200))
             ret.append(hooks.EarlyStopping(cfg.SOLVER.EARLY_STOPPING_PATIENCE, cfg.SOLVER.EARLY_STOPPING_MIN_DELTA, cfg.TEST.EVAL_PERIOD))
-        ret.appendd(hooks.VerifySharedTrainer())
+        ret.append(hooks.VerifySharedTrainer())
         return ret
 
     def build_writers(self):
