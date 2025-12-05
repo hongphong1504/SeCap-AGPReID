@@ -8,6 +8,7 @@ import os
 import tempfile
 import time
 from collections import Counter
+import torch.distributed as dist
 
 import torch
 from torch import nn
@@ -561,9 +562,6 @@ class EarlyStopping(HookBase):
         self.logger.info(f"[EarlyStop] EarlyStopping: patience={self.patience}, min_delta={self.min_delta}, monitoring '{self.metric_name}'")
 
     def _assess(self):
-        if not comm.is_main_process():
-            return 
-
         storage = get_event_storage()
 
         current_metric = storage.latest()[self.metric_name][0] if self.metric_name in storage.latest() else -1
@@ -589,4 +587,12 @@ class EarlyStopping(HookBase):
     def after_epoch(self):
         next_epoch = self.trainer.epoch + 1
         if self._period > 0 and next_epoch % self._period == 0:
-            self._assess()
+            if comm.is_main_process():
+                self._assess()
+                stop_flag = int(self.trainer._early_stopping)
+            else:
+                stop_flag = 0
+
+            stop_tensor = torch.tensor(stop_flag, device=torch.device("cuda"))
+            dist.broadcast(stop_tensor, src=0)
+            self.trainer._early_stopping = bool(stop_tensor.item())
