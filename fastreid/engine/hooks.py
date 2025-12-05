@@ -588,3 +588,14 @@ class EarlyStopping(HookBase):
         next_epoch = self.trainer.epoch + 1
         if self._period > 0 and next_epoch % self._period == 0:
             self._assess()
+
+
+class VerifySharedTrainer(HookBase):
+    def before_train(self):
+        if not comm.is_main_process():
+            return 
+        self.trainer._verifyFlag = True 
+    def before_epoch(self):
+        logger = logging.getLogger(__name__)
+        logger.info(f"Process {comm.get_rank()}: Verify Flag = {self.trainer._verifyFlag}")
+        
