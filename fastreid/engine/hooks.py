@@ -558,9 +558,12 @@ class EarlyStopping(HookBase):
         self.best_metric = -1
         self.wait = 0
         self.stopped_epoch = 0
-        self.logger.info(f"EarlyStopping: patience={self.patience}, min_delta={self.min_delta}, monitoring '{self.metric_name}'")
+        self.logger.info(f"[EarlyStop] EarlyStopping: patience={self.patience}, min_delta={self.min_delta}, monitoring '{self.metric_name}'")
 
     def _assess(self):
+        if not comm.is_main_process():
+            return 
+
         storage = get_event_storage()
 
         current_metric = storage.latest()[self.metric_name][0] if self.metric_name in storage.latest() else -1
@@ -573,16 +576,15 @@ class EarlyStopping(HookBase):
         if improved:
             self.best_metric = current_metric
             self.wait = 0
-            self.logger.info(f"Epoch {self.trainer.epoch}: New best: {current_metric:.4f}")
+            self.logger.info(f"[EarlyStop] Epoch {self.trainer.epoch}: New best: {current_metric:.4f}")
         else:
             self.wait += 1
-            self.logger.info(f"Epoch {self.trainer.epoch}: No improvement, current: {current_metric:.4f} "
-                             f"(best: {self.best_metric:.4f}), wait: {self.wait}/{self.patience}")
+            self.logger.info(f"[EarlyStop] Epoch {self.trainer.epoch}, no improvement: {current_metric:.4f} (best: {self.best_metric:.4f}), wait: {self.wait}/{self.patience}")
 
         if self.wait >= self.patience:
             self.stopped_epoch = self.trainer.epoch
-            self.logger.warning(f"Early stopping triggered at epoch {self.stopped_epoch}!")
-            raise StopIteration
+            self.logger.warning(f"[EarlyStop] Early stopping triggered at epoch {self.stopped_epoch}!")
+            self.trainer._early_stopping = True
 
     def after_epoch(self):
         next_epoch = self.trainer.epoch + 1

@@ -107,6 +107,7 @@ class TrainerBase:
 
     def __init__(self):
         self._hooks = []
+        self._early_stopping = False    
 
     def register_hooks(self, hooks):
         """
@@ -139,6 +140,9 @@ class TrainerBase:
             try:
                 self.before_train()
                 for self.epoch in range(start_epoch, max_epoch):
+                    if self._early_stopping == True:
+                        logger.info(f"[EarlyStop] Early stopping flag detected, stopping training...")
+                        break
                     self.before_epoch()
                     for _ in range(iters_per_epoch):
                         self.before_step()
@@ -146,8 +150,6 @@ class TrainerBase:
                         self.after_step()
                         self.iter += 1
                     self.after_epoch()
-            except StopIteration:  # Used by EarlyStoppingHook
-                logger.info("Training stopped by early stopping.")
             except Exception:
                 logger.exception("Exception during training:")
                 raise
