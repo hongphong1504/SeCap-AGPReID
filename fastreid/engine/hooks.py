@@ -591,7 +591,7 @@ class EarlyStopping(HookBase):
 
 
 class VerifySharedTrainer(HookBase):
-    def before_train(self):
+    def after_epoch(self):
         if not comm.is_main_process():
             return 
         self.trainer._verifyFlag = True 
