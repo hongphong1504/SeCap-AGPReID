@@ -140,18 +140,16 @@ class TrainerBase:
             try:
                 self.before_train()
                 for self.epoch in range(start_epoch, max_epoch):
-                    self.before_epoch()
                     if self._verifyFlag == True:
                         logger.info("Stop training")
                         break
+                    self.before_epoch()
                     for _ in range(iters_per_epoch):
                         self.before_step()
                         self.run_step()
                         self.after_step()
                         self.iter += 1
                     self.after_epoch()
-            except StopIteration:  # Used by EarlyStoppingHook
-                logger.info("Training stopped by early stopping.")
             except Exception:
                 logger.exception("Exception during training:")
                 raise
