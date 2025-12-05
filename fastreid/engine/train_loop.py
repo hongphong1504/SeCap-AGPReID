@@ -107,6 +107,7 @@ class TrainerBase:
 
     def __init__(self):
         self._hooks = []
+        self._verifyFlag = False
 
     def register_hooks(self, hooks):
         """
@@ -140,6 +141,9 @@ class TrainerBase:
                 self.before_train()
                 for self.epoch in range(start_epoch, max_epoch):
                     self.before_epoch()
+                    if self._verifyFlag == True:
+                        logger.info("Stop training")
+                        break
                     for _ in range(iters_per_epoch):
                         self.before_step()
                         self.run_step()
