@@ -592,7 +592,8 @@ class EarlyStopping(HookBase):
                 stop_flag = int(self.trainer._early_stopping)
             else:
                 stop_flag = 0
-
-            stop_tensor = torch.tensor(stop_flag, device=torch.device("cuda"))
-            dist.broadcast(stop_tensor, src=0)
-            self.trainer._early_stopping = bool(stop_tensor.item())
+                
+            if comm.get_world_size() > 1:
+                stop_tensor = torch.tensor(stop_flag, device=torch.device("cuda"))
+                dist.broadcast(stop_tensor, src=0)
+                self.trainer._early_stopping = bool(stop_tensor.item())
