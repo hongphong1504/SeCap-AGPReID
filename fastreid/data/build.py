@@ -71,6 +71,8 @@ def _train_loader_from_config(cfg, *, train_set=None, transforms=None, sampler=N
             sampler = samplers.ImbalancedDatasetSampler(train_set.img_items)
         elif sampler_name == "RandomIdentityModalitySampler":
             sampler = samplers.RandomIdentityModalitySampler(train_set.img_items, mini_batch_size, num_instance)
+        elif sampler_name == "CrossViewIdentitySampler":
+            sampler = samplers.CrossViewIdentitySampler(train_set.img_items, mini_batch_size, num_instance)
         else:
             raise ValueError("Unknown training sampler: {}".format(sampler_name))
 

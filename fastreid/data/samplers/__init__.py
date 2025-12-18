@@ -8,6 +8,7 @@ from .triplet_sampler import BalancedIdentitySampler, NaiveIdentitySampler, SetR
 from .data_sampler import TrainingSampler, InferenceSampler
 from .imbalance_sampler import ImbalancedDatasetSampler
 from .modalitySampler import RandomIdentityModalitySampler
+from .myUpdate_CrossViewIdentitySampler import CrossViewIdentitySampler
 __all__ = [
     "BalancedIdentitySampler",
     "NaiveIdentitySampler",
@@ -15,5 +16,6 @@ __all__ = [
     "TrainingSampler",
     "InferenceSampler",
     "ImbalancedDatasetSampler",
-    "RandomIdentityModalitySampler"
+    "RandomIdentityModalitySampler",
+    "CrossViewIdentitySampler"
 ]
