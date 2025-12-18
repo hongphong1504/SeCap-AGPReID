@@ -793,7 +793,8 @@ class Vision_Transformer_SeCap(nn.Module):
         local_feat = self.b1(local_features)
         global_features = local_feat[:, 0:1]
         view_features = local_feat[:, 1:2]
-        local_feat = local_features[:, 2:]
+        # local_feat = local_features[:, 2:]
+        local_feat = local_feat[:, 2:, :] # fix bug 
         inv_features = global_features - view_features
 
         # PRM
