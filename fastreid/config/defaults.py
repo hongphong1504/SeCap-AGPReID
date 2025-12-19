@@ -286,6 +286,9 @@ _C.SOLVER.STEPS = [30, 55]
 # Cosine annealing learning rate options
 _C.SOLVER.ETA_MIN_LR = 1e-7
 
+# StepLR learning rate options
+_C.SOLVER.STEP_SIZE = 2
+
 # Warmup options
 _C.SOLVER.WARMUP_FACTOR = 0.1
 _C.SOLVER.WARMUP_ITERS = 1000
