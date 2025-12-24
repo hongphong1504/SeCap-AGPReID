@@ -14,8 +14,8 @@ MODEL:
     PRETRAIN_PATH: ./pretrained/jx_vit_base_p16_224-80ecf9dd.pth
     STRIDE_SIZE: (12, 12)
     DROP_PATH_RATIO: 0.1
-    DROP_RATIO: 0.0
-    ATT_DROP_RATE: 0.0
+    DROP_RATIO: 0.2
+    ATT_DROP_RATE: 0.2
     INNER_SUB: True
     PROMPT_LEN: 64
     PROMPT_DEPTH: 2
@@ -71,8 +71,8 @@ SOLVER:
   AMP:
     ENABLED: False
   OPT: AdamW 
-  MAX_EPOCH: 15
-  BASE_LR: 3e-5
+  MAX_EPOCH: 18
+  BASE_LR: 2e-5
   WEIGHT_DECAY: 0.05
   WEIGHT_DECAY_NORM: 0.0
   BIAS_LR_FACTOR: 1.0
